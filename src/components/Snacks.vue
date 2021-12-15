@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-15 11:20:45
- * @LastEditTime: 2021-12-15 16:27:40
+ * @LastEditTime: 2021-12-15 16:48:05
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\components\Snacks.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -29,8 +29,7 @@
   <el-dialog
     title="提示"
     :visible.sync="dialogVisible"
-    width="30%"
-    :before-close="handleClose">
+    width="30%">
     <span>你的小宝贝没了！！！！</span>
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeGame">更换游戏</el-button>

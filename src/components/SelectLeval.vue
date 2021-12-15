@@ -1,14 +1,14 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-14 15:37:12
- * @LastEditTime: 2021-12-15 15:14:24
+ * @LastEditTime: 2021-12-15 16:56:12
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\components\Selectleval.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
 -->
 <template>
     <div class="main">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs>
         <el-tab-pane label="扫雷" name="first">
           <div>选择难度</div>
           <ul>
@@ -17,11 +17,15 @@
         </el-tab-pane>
         <el-tab-pane label="贪吃蛇" name="second">
           <ul>
-            <li :key="index" @click="handleSnackLevel()"> 开始游戏 </li>
+            <li @click="handleSnackLevel()"> 开始游戏 </li>
           </ul>
         </el-tab-pane>
-        <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
-        <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+        <el-tab-pane label="俄罗斯方块" name="third">
+					<ul>
+            <li @click="handleTetrisLevel()"> 开始游戏 </li>
+          </ul>
+				</el-tab-pane>
+        <el-tab-pane label="。。。" name="fourth">。。。</el-tab-pane>
       </el-tabs>
     </div>
 </template>
@@ -61,7 +65,11 @@ export default {
     // 选择贪吃蛇难度
     handleSnackLevel() {
       this.$emit("snack-chose")
-    }
+    },
+		// 选择俄罗斯方块
+		handleTetrisLevel() {
+			this.$emit("tetris-chose")
+		}
 	}
 };
 </script>

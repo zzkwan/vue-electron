@@ -1,0 +1,6 @@
+@font-face{
+    font-family:'tmb';/*为字体命名为tmb*/
+    src:url-loader('DSDIGIB.TTF');/* 根据配置，这里的src我们要用url-loader引入 */
+    font-weight: normal;  
+    font-style: normal; 
+}
