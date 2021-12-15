@@ -34,7 +34,7 @@
             <div>剩余雷数：{{ minePosition.length }}</div>
             <div class="tool">
                 <div @click="reStart">重开一局</div>
-                <div @click="changeLevel">改变难度</div>
+                <div @click="changeLevel">更换游戏</div>
             </div>
         </div>
     </div>
@@ -349,7 +349,7 @@ export default {
         },
         // 改变难度
         changeLevel() {
-            this.$emit('update:showGame', false);
+            this.$emit('closeGame');
         }
 	}
 };

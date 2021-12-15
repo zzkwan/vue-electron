@@ -1,17 +1,28 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-14 15:37:12
- * @LastEditTime: 2021-12-15 10:18:35
+ * @LastEditTime: 2021-12-15 15:14:24
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\components\Selectleval.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
 -->
 <template>
     <div class="main">
-		<div>选择难度</div>
-		<ul>
-			<li v-for="(item, index) in level" :key="index" @click="handleChoseLevel(item.value)">{{ item.text }}</li>
-		</ul>
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="扫雷" name="first">
+          <div>选择难度</div>
+          <ul>
+            <li v-for="(item, index) in level" :key="index" @click="handleChoseLevel(item.value)">{{ item.text }}</li>
+          </ul>
+        </el-tab-pane>
+        <el-tab-pane label="贪吃蛇" name="second">
+          <ul>
+            <li :key="index" @click="handleSnackLevel()"> 开始游戏 </li>
+          </ul>
+        </el-tab-pane>
+        <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
+        <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+      </el-tabs>
     </div>
 </template>
 
@@ -43,10 +54,14 @@ export default {
 		}
 	},
 	methods: {
-		// 选择难度
+		// 选择扫雷难度
 		handleChoseLevel(level) {
-            this.$emit("chose-level", level);
-		}
+      this.$emit("chose-level", level);
+		},
+    // 选择贪吃蛇难度
+    handleSnackLevel() {
+      this.$emit("snack-chose")
+    }
 	}
 };
 </script>
