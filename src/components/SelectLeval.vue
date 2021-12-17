@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-14 15:37:12
- * @LastEditTime: 2021-12-15 16:56:12
+ * @LastEditTime: 2021-12-16 17:48:17
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\components\Selectleval.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -25,7 +25,11 @@
             <li @click="handleTetrisLevel()"> 开始游戏 </li>
           </ul>
 				</el-tab-pane>
-        <el-tab-pane label="。。。" name="fourth">。。。</el-tab-pane>
+        <el-tab-pane label="飞机大战" name="fourth">
+					<ul>
+            <li @click="handlePlaneWarLevel()"> 开始游戏 </li>
+          </ul>
+				</el-tab-pane>
       </el-tabs>
     </div>
 </template>
@@ -69,6 +73,9 @@ export default {
 		// 选择俄罗斯方块
 		handleTetrisLevel() {
 			this.$emit("tetris-chose")
+		},
+		handlePlaneWarLevel() {
+			this.$emit("planeWar-chose")
 		}
 	}
 };

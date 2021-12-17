@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-15 17:07:45
- * @LastEditTime: 2021-12-15 17:58:58
+ * @LastEditTime: 2021-12-16 17:46:26
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\views\index.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -22,11 +22,16 @@
 			v-if="showTetris"
 			@closeGame="closeGame"
 		/>
+		<PlaneWar 
+			v-if="showPlaneWar"
+			@closeGame="closeGame"
+		/>
 		<select-level 
 			v-if="showLevel"
 			@chose-level="choseLevel"
       @snack-chose="snackchose"
       @tetris-chose="tetrischose"
+			@planeWar-chose="planeWarchose"
     />
 	</div>
 </template>
@@ -36,13 +41,15 @@ import SelectLevel from ".././components/SelectLeval";
 import MineSweeping from ".././components/MineSweeping";
 import Snacks from ".././components/Snacks"
 import Tetris from ".././components/Tetris"
+import PlaneWar from ".././components/PlaneWar"
 export default {
 	name: "index",
 	components: { 
 		SelectLevel,
 		MineSweeping,
     Snacks,
-		Tetris
+		Tetris,
+		PlaneWar
 	},
 	data() {
 		return {
@@ -54,6 +61,8 @@ export default {
       showSnack: false,
 			// 是否展示俄罗斯方块游戏盘
 			showTetris: false,
+			// 是否展示飞机大战游戏盘
+			showPlaneWar: false,
 			// 游戏盘格子数和雷数
 			gameInfo: [8, 8, 10]
 		}
@@ -73,13 +82,18 @@ export default {
     },
 		// 选择俄罗斯方块游戏
 		tetrischose() {
-      // eslint-disable-next-line no-debugger
-      debugger
 			this.showTetris = true
+			this.showLevel = false
+		},
+		// 选择飞机大战游戏
+		planeWarchose() {
+			this.showPlaneWar = true
 			this.showLevel = false
 		},
 		// 结束游戏，返回选择界面
     closeGame() {
+			this.showPlaneWar = false
+			this.showTetris = false
       this.showGame = false
       this.showSnack = false
       this.showLevel = true

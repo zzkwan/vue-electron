@@ -1,23 +1,26 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-14 15:37:12
- * @LastEditTime: 2021-12-15 17:12:28
+ * @LastEditTime: 2021-12-16 17:48:55
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\App.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
 -->
 <template>
 	<div id="app">
-		<Index />
+		<Index v-if="true" />
+		<Test v-if="false" />
 	</div>
 </template>
 
 <script>
 import Index from "./views/index"
+import Test from "./views/test"
 export default {
 	name: "app",
 	components: {
-		Index
+		Index,
+		Test
 	}
 }
 </script>	
