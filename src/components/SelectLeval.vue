@@ -1,9 +1,9 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-14 15:37:12
- * @LastEditTime: 2021-12-16 17:48:17
+ * @LastEditTime: 2021-12-20 20:34:43
  * @LastEditors: Do not edit
- * @FilePath: \vue-electron\src\components\Selectleval.vue
+ * @FilePath: \vue-electron\src\components\SelectLeval.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
 -->
 <template>
@@ -26,8 +26,9 @@
           </ul>
 				</el-tab-pane>
         <el-tab-pane label="飞机大战" name="fourth">
-					<ul>
-            <li @click="handlePlaneWarLevel()"> 开始游戏 </li>
+					<div>选择难度</div>
+          <ul>
+            <li v-for="(item, index) in planes" :key="index" @click="handlePlaneWarLevel(item.value)">{{ item.text }}</li>
           </ul>
 				</el-tab-pane>
       </el-tabs>
@@ -58,6 +59,21 @@ export default {
 					text: '王者',
 					value: [30, 16, 99]  
 				}
+			],
+			// 战机选择
+			planes: [
+				{
+					text: '经典传奇',
+					value: 0
+				},
+				{
+					text: '蓝色魅影',
+					value: 1
+				},
+				{
+					text: '金色传说',
+					value: 2
+				}
 			]
 		}
 	},
@@ -74,8 +90,8 @@ export default {
 		handleTetrisLevel() {
 			this.$emit("tetris-chose")
 		},
-		handlePlaneWarLevel() {
-			this.$emit("planeWar-chose")
+		handlePlaneWarLevel(chose) {
+			this.$emit("planeWar-chose", chose)
 		}
 	}
 };

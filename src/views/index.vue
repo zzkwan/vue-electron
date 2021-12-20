@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-15 17:07:45
- * @LastEditTime: 2021-12-16 17:46:26
+ * @LastEditTime: 2021-12-20 20:20:46
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\views\index.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -24,6 +24,7 @@
 		/>
 		<PlaneWar 
 			v-if="showPlaneWar"
+			:chose-plane="chosePlane"
 			@closeGame="closeGame"
 		/>
 		<select-level 
@@ -64,7 +65,9 @@ export default {
 			// 是否展示飞机大战游戏盘
 			showPlaneWar: false,
 			// 游戏盘格子数和雷数
-			gameInfo: [8, 8, 10]
+			gameInfo: [8, 8, 10],
+			// 飞机种类选择
+			chosePlane: 0
 		}
 	},
 	methods: {
@@ -86,7 +89,8 @@ export default {
 			this.showLevel = false
 		},
 		// 选择飞机大战游戏
-		planeWarchose() {
+		planeWarchose(val) {
+			this.chosePlane = val
 			this.showPlaneWar = true
 			this.showLevel = false
 		},

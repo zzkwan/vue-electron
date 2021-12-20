@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-16 16:46:29
- * @LastEditTime: 2021-12-20 19:09:09
+ * @LastEditTime: 2021-12-20 20:33:06
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\components\PlaneWar.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -11,13 +11,31 @@
         <canvas id='canvas'>
             您的浏览器不支持canvas绘图！
         </canvas>
+        <el-dialog
+            title="提示"
+            :visible.sync="dialogVisible"
+            width="30%">
+            <div>你的小宝贝没了！！！！</div>
+            <div>最终成绩：{{ gameScore }}</div>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="closeGame">更换游戏</el-button>
+            <el-button type="primary" @click="start">重新开始</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
 export default {
+    props: {
+        chosePlane: {
+            required: true,
+            type: Number
+        },
+    },
     data() {
         return {
+            dialogVisible: false,
             width: 0,// 画布宽度
             height: 0,// 画布高度
             canvas: {},// 画布
@@ -43,13 +61,16 @@ export default {
                 // 游戏loading图
                 ['game_loading1.png', 'game_loading2.png', 'game_loading3.png', 'game_loading4.png'],
                 // 玩家飞机图
-                ['hero1.png', 'hero2.png', 'hero_blowup_n1.png', 'hero_blowup_n2.png', 'hero_blowup_n3.png', 'hero_blowup_n4.png']
+                ['hero1.png', 'p1.png', 'p2.png', 'hero2.png', 'hero_blowup_n1.png', 'hero_blowup_n2.png', 'hero_blowup_n3.png', 'hero_blowup_n4.png'],
+                // 增加子弹数或增加攻速
+                'm.png'
             ],
             // 存储不同类型图片
             bg: null,
             pause: null,
             m: null,
             startImg: null,
+            up: null,
             enemy1: [],
             enemy2: [],
             enemy3: [],
@@ -57,6 +78,7 @@ export default {
             heroImg: [],
             // 加载图片进度
             progress: 1,
+            position: 0,// 加载小图标的位置
             // 函数中的全局属性
             img: {},
             text: '',
@@ -65,8 +87,10 @@ export default {
             y: 0,
             index: 0,// 
             count: 0,// 控制hero图片切换的频率
-            hCount: 0,// 控制子弹发射的频率
+            hCount: 0,// 控制子弹发射
+            hC: 1,// 控制子弹发射的频率
             eCount: 0,// 控制敌机发射的频率
+            upCount: 0,// 控制奖励出现的频率
             n: 0,
             life: 0,
             d: 0,
@@ -75,6 +99,7 @@ export default {
             pBg: {},
             load: {},
             // 战机
+            level: 0,
             hero: {},
             offsetX: 0,
             offsetY: 0,
@@ -87,7 +112,7 @@ export default {
             mx: 0,
             my: 0,
             removable: true,
-
+            ups: [], // 画布中显示的所有奖励
             liveEnemy: [],// 用于存储画布上的所有敌机
             enemy: {},// 保存敌机图片的数组
             speed: 0,// 敌机速度
@@ -116,10 +141,24 @@ export default {
         },
         // 初始化战机
         drawHero() {
-            this.ctx.drawImage(this.heroImg[this.index], this.x, this.y);
+            this.ctx.drawImage(this.heroImg[this.chosePlane], this.x, this.y);
             this.ctx.fillText('SCORE:' + this.gameScore, 10, 30);
-            this.hCount++;
-            if (this.hCount % 3 == 0) { // 同时生成三颗子弹
+            this.hCount += this.hC;
+            if (this.level === 0 && this.hCount / 5 >= 1) { // 同时生成一颗子弹
+                this.n == 32 && (this.n = 0); 
+                this.hullet.push(this.createHullet(this.n))
+                this.n = 32
+                this.hCount = 0;
+            }
+            if (this.level === 1 && this.hCount / 5 >= 1) { // 同时生成两颗子弹
+                this.n == 32 && (this.n = -32); 
+                this.hullet.push(this.createHullet(this.n))
+                this.n == -32 && (this.n = 32);
+                this.hullet.push(this.createHullet(this.n))
+                this.n == 32
+                this.hCount = 0;
+            }
+            if (this.level === 2 && this.hCount / 5 >= 1) { // 同时生成三颗子弹
                 this.n == 32 && (this.n = 0); 
                 this.hullet.push(this.createHullet(this.n));
                 this.n == 0 && (this.n = -32);
@@ -132,6 +171,52 @@ export default {
             if (this.eCount % 8 == 0) { //生成敌机
                 this.liveEnemy.push(this.createEnemy());
                 this.eCount = 0;
+            }
+            this.upCount++
+            if (this.upCount % 100 == 0) {
+                this.ups.push(this.createUp())
+            }
+        },
+        // 创建奖励
+        createUp() {
+            let u = new Object()
+            u.x = parseInt(Math.random() * (this.canvas.width - this.up.width))
+            u.y = -this.up.height
+            u.speed = 3
+            u.removable = false
+            u.width = this.up.width
+            u.height = this.up.height
+            u.draw = (u, that) => {
+                this.ctx.drawImage(this.up, u.x, u.y);
+                u.y += u.speed; // 移动奖励
+                u.hit(u, that); //判断是否击中敌机
+                if (u.y > this.canvas.height) { // 若敌机飞出画布，就标识可移除(让你不长眼！)
+                    u.removable = true;
+                }
+            }
+            u.hit = (u, that) => {
+                // 战机与奖励的碰撞检测
+                if (u.x + u.width >= that.x && that.x + that.heroImg[this.chosePlane].width >= u.x &&
+                    that.y + that.heroImg[this.chosePlane].height >= u.y && u.height + u.y >= that.y) {
+                    if (Math.random() * 3 > 1) {
+                        that.hC++
+                    } else {
+                        that.level < 2 && that.level++
+                    }
+                    u.removable = true; // 碰撞后的奖励标识为可移除
+                }
+            }
+            return u
+        },
+        // 画出所有奖励
+        drawUp() {
+            for (let i = 0; i < this.ups.length; i++) {
+                if (this.ups[i].removable) {
+                    this.ups.splice(i, 1);
+                }
+            }
+            for (let i = 0; i < this.ups.length; i++) {
+                this.ups[i].draw(this.ups[i], this);
             }
         },
         // 创建敌机
@@ -204,8 +289,13 @@ export default {
                             // 计分
                             this.gameScore += E.speed == 6 ? 10 : this.speed == 4 ? 20 : 100;
                         }
-                        // h.removable = true; // 碰撞后的子弹标识为可移除
+                        h.removable = true; // 碰撞后的子弹标识为可移除
                     }
+                }
+                // 敌机与子弹的碰撞检测，自己体会吧
+                if (E.x + E.width >= this.x && this.x + this.heroImg[this.chosePlane].width >= E.x &&
+                    this.y + this.heroImg[this.chosePlane].height >= E.y && E.height + E.y >= this.y) {
+                    this.curPhase = this.PHASE_GAMEOVER; // 碰撞后游戏结束
                 }
             }
             return E
@@ -226,7 +316,7 @@ export default {
             let h = new Object()
             h.n = n
             // 子弹的坐标
-            h.mx = this.x + (this.heroImg[0].width - this.m.width) / 2 + n; 
+            h.mx = this.x + (this.heroImg[this.chosePlane].width - this.m.width) / 2 + n; 
             h.my = n == 0 ? this.y - this.m.height : this.y + this.m.height;
             h.width = this.m.width;  // 子弹的宽和高
             h.height = this.m.height;
@@ -294,6 +384,7 @@ export default {
             for (let i = 0; i < this.imgName[8].length; i++) {
                 this.heroImg[i] = this.nImg(this.imgName[8][i]);
             }
+            this.up = this.nImg(this.imgName[9])
         },
         nImg(src) {
             this.img = new Image();
@@ -319,6 +410,13 @@ export default {
         },
         // 开始游戏
         start() {
+            this.level = 0
+            this.hC = 1
+            this.position = 0
+            this.liveEnemy = []
+            this.ups = []
+            this.hullet = []
+            this.dialogVisible = false
             this.curPhase = this.PHASE_READY;
             this.canvas.onclick = () => {
                 this.curPhase == this.PHASE_READY && (this.curPhase = this.PHASE_LOADING);
@@ -344,11 +442,10 @@ export default {
         // loading
         loading() {
             let index = 0;
-            let position = 0
             function loading() {
-                this.ctx.drawImage(this.gameLoad[Math.floor(index)], position, this.canvas.height - this.gameLoad[0].height)
+                this.ctx.drawImage(this.gameLoad[Math.floor(index)], this.position, this.canvas.height - this.gameLoad[0].height)
                 index += 0.1
-                position += (this.canvas.width - this.gameLoad[0].width) / 30
+                this.position += (this.canvas.width - this.gameLoad[0].width) / 30
                 if (index > 3) {
                     this.curPhase = this.PHASE_PLAY
                     index = 0
@@ -362,11 +459,9 @@ export default {
         },
         // 游戏结束
         gameover(){
-            alert("游戏结束，成绩"+this.gameScore); 
+            this.dialogVisible = true
             this.gameScore=0;  
             this.curPhase =this.PHASE_READY;  
-            this.hero = null;
-            this.hero = new this.Hero();  	    
         },
         // 游戏引擎
         gameEngine() {
@@ -384,6 +479,7 @@ export default {
                     this.drawHero()
                     this.drawHullet()
                     this.drawEnemy()
+                    this.drawUp()
                     break;
                 case this.PHASE_PAUSE:
                     this.drawPause();
@@ -393,6 +489,9 @@ export default {
                     break;    
             }
             //requestAnimationFrame(gameEngine);
+        },
+        closeGame() {
+            this.$emit("closeGame")
         }
     },
     mounted() {
