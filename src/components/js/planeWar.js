@@ -1,7 +1,7 @@
 /*
  * @Author: 卓智锴
  * @Date: 2021-12-16 17:17:13
- * @LastEditTime: 2021-12-16 17:40:14
+ * @LastEditTime: 2021-12-17 15:16:59
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\components\js\planeWar.js
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -386,3 +386,8 @@ function gameEngine() {
     //requestAnimationFrame(gameEngine);
 }
 setInterval(gameEngine, 50);
+export default {
+    Hero: this.Hero,
+    Hullet: this.Hullet,
+    Enemy: this.Enemy
+}

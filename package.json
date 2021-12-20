@@ -60,7 +60,12 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "no-async-promise-executor": "off",
+      "no-unused-vars": "off",
+      "comma-dangle": "off",
+      "no-debugger": "off"
+    }
   },
   "browserslist": [
     "> 1%",
