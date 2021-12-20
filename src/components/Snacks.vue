@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-15 11:20:45
- * @LastEditTime: 2021-12-15 16:48:05
+ * @LastEditTime: 2021-12-20 20:38:07
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\components\Snacks.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -63,6 +63,7 @@ export default {
         this.initializationTimer(); // 初始化定时器
         this.generateFood(); // 生成食物
         this.addKeyboardEvents(); // 添加键盘按下事件
+        this.changeMoveDirection(1)// 初始化键盘方向
       },
       closeGame() {
         this.$emit("closeGame")
