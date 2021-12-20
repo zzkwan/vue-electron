@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-16 16:46:29
- * @LastEditTime: 2021-12-20 15:47:29
+ * @LastEditTime: 2021-12-20 19:09:09
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\components\PlaneWar.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -119,17 +119,136 @@ export default {
             this.ctx.drawImage(this.heroImg[this.index], this.x, this.y);
             this.ctx.fillText('SCORE:' + this.gameScore, 10, 30);
             this.hCount++;
-            // if (this.hCount % 3 == 0) { // 同时生成三颗子弹
-            //     this.n == 32 && (this.n = 0); 
-            //     this.n == 0 && (this.n = -32);
-            //     this.n == -32 && (this.n = 32);
-            //     this.hCount = 0;
-            // }
+            if (this.hCount % 3 == 0) { // 同时生成三颗子弹
+                this.n == 32 && (this.n = 0); 
+                this.hullet.push(this.createHullet(this.n));
+                this.n == 0 && (this.n = -32);
+                this.hullet.push(this.createHullet(this.n));
+                this.n == -32 && (this.n = 32);
+                this.hullet.push(this.createHullet(this.n));
+                this.hCount = 0;
+            }
             this.eCount++;
-            // if (this.eCount % 8 == 0) { //生成敌机
-            //     this.liveEnemy.push(new Enemy());
-            //     this.eCount = 0;
-            // }
+            if (this.eCount % 8 == 0) { //生成敌机
+                this.liveEnemy.push(this.createEnemy());
+                this.eCount = 0;
+            }
+        },
+        // 创建敌机
+        createEnemy() {
+            let E = new Object()
+            E.n = Math.random() * 20;
+            E.enemy = null; // 保存敌机图片
+            E.speed = 0; // 敌机的速度
+            E.lifes = 2; // 敌机的生命值
+            if (E.n < 1) { // 不同大小的敌机随机出现
+                E.enemy = this.enemy3[0]; 
+                E.speed = 2;
+                E.lifes = 50;
+            } else if (E.n < 6) {
+                E.enemy = this.enemy2[0];
+                E.speed = 4;
+                E.lifes = 10;
+            } else {
+                E.enemy = this.enemy1[0];
+                E.speed = 6;
+            }
+            E.x = parseInt(Math.random() * (this.canvas.width - E.enemy.width));
+            E.y = -E.enemy.height;
+            E.width = E.enemy.width;
+            E.height = E.enemy.height;
+            E.index = 0;
+            E.removable = false;
+            // 标识敌机是否狗带，若狗带就画它的爆炸图(也就是遗像啦)
+            E.die = false;
+            E.draw = (E) => {
+                // 处理不同敌机的爆炸图轮番上阵
+                if (E.speed == 2) {
+                    if (E.die) {
+                        if (E.index < 2) { E.index = 3; }
+                        if (E.index < this.enemy3.length) {
+                            E.enemy = this.enemy3[E.index++];
+                        } else {
+                            E.removable = true;
+                        }
+                    } else {
+                        E.enemy = this.enemy3[E.index];
+                        E.index == 0 ? E.index = 1 : E.index = 0;
+                    }
+                } else if (E.die) {
+                    if (E.index < this.enemy1.length) {
+                        if (E.speed == 6) {
+                            E.enemy = this.enemy1[E.index++];
+                        } else {
+                            E.enemy = this.enemy2[E.index++];
+                        }
+                    } else {
+                        E.removable = true;
+                    }
+                }
+                this.ctx.drawImage(E.enemy, E.x, E.y);
+                E.y += E.speed; // 移动敌机
+                E.hit(E); //判断是否击中敌机
+                if (E.y > this.canvas.height) { // 若敌机飞出画布，就标识可移除(让你不长眼！)
+                    E.removable = true;
+                }
+            }
+            E.hit = (E) => { //判断是否击中敌机
+                for (let i = 0; i < this.hullet.length; i++) {
+                    let h = this.hullet[i];
+                    // 敌机与子弹的碰撞检测，自己体会吧
+                    if (E.x + E.width >= h.mx && h.mx + h.width >= E.x &&
+                        h.my + h.height >= E.y && E.height + E.y >= h.my) {
+                        if (--E.lifes == 0) { // 若生命值为零，标识为死亡
+                            E.die = true;
+                            // 计分
+                            this.gameScore += E.speed == 6 ? 10 : this.speed == 4 ? 20 : 100;
+                        }
+                        // h.removable = true; // 碰撞后的子弹标识为可移除
+                    }
+                }
+            }
+            return E
+        },
+        // 画出所有敌机
+        drawEnemy() {
+            for (let i = 0; i < this.liveEnemy.length; i++) {
+                if (this.liveEnemy[i].removable) {
+                    this.liveEnemy.splice(i, 1);
+                }
+            }
+            for (let i = 0; i < this.liveEnemy.length; i++) {
+                this.liveEnemy[i].draw(this.liveEnemy[i]);
+            }
+        },
+        // 创建子弹
+        createHullet(n) {
+            let h = new Object()
+            h.n = n
+            // 子弹的坐标
+            h.mx = this.x + (this.heroImg[0].width - this.m.width) / 2 + n; 
+            h.my = n == 0 ? this.y - this.m.height : this.y + this.m.height;
+            h.width = this.m.width;  // 子弹的宽和高
+            h.height = this.m.height;
+            h.removable = false; // 标识子弹是否可移除了\
+            h.draw = (h) => {
+                this.ctx.drawImage(this.m, h.mx, h.my);
+                h.my -= 20;
+                h.mx += h.n == 32 ? 3 : h.n == -32 ? -3 : 0;
+                if (h.my < -this.m.height) {  // 如果子弹飞出画布，就标记为可移除
+                    h.removable = true;
+                }
+            }
+            return h
+        },
+        // 初始化子弹
+        drawHullet() {
+            for (let i = 0; i < this.hullet.length; i++) { //在画布上画出所以子弹
+                this.hullet[i].draw(this.hullet[i]);
+                if (this.hullet[i].removable) { // 如果为true就移除这颗子弹
+                    this.hullet.splice(i, 1);
+                }
+            }
         },
         // 初始化画布
         init() {
@@ -263,6 +382,8 @@ export default {
                 case this.PHASE_PLAY:
                     this.pBg();
                     this.drawHero()
+                    this.drawHullet()
+                    this.drawEnemy()
                     break;
                 case this.PHASE_PAUSE:
                     this.drawPause();
