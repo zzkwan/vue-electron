@@ -1,7 +1,7 @@
 /*
  * @Author: 卓智锴
  * @Date: 2021-12-16 17:17:13
- * @LastEditTime: 2021-12-17 15:16:59
+ * @LastEditTime: 2021-12-20 15:02:39
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\components\js\planeWar.js
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -150,70 +150,70 @@ function Hero() {
     this.n = 0;
     this.life=0;
     this.draw = function() {
-      this.count++;
-      this.hit();
-      if(this.index>4){
-        curPhase =PHASE_GAMEOVER; 
-        this.index=5;     
-      } 
-      if (this.count % 3 == 0&&this.index<=1) { // 切换hero的图片
-          this.index = this.index == 0 ? 1 : 0;
-          this.count = 0;
-      }
-      ctx.drawImage(heroImg[this.index], this.x, this.y);
-      ctx.fillText('SCORE:' + gameScore, 10, 30);
-      this.hCount++;
-      if (this.hCount % 3 == 0) { // 同时生成三颗子弹
-          this.n == 32 && (this.n = 0); 
-          hullet.push(new Hullet(this.n));
-          this.n == 0 && (this.n = -32);
-          hullet.push(new Hullet(this.n));
-          this.n == -32 && (this.n = 32);
-          hullet.push(new Hullet(this.n));
-          this.hCount = 0;
-      }
-      this.eCount++;
-      if (this.eCount % 8 == 0) { //生成敌机
-          liveEnemy.push(new Enemy());
-          this.eCount = 0;
-      }
+        this.count++;
+        this.hit();
+        if(this.index>4){
+            curPhase =PHASE_GAMEOVER; 
+            this.index=5;     
+        } 
+        if (this.count % 3 == 0&&this.index<=1) { // 切换hero的图片
+            this.index = this.index == 0 ? 1 : 0;
+            this.count = 0;
+        }
+        ctx.drawImage(heroImg[this.index], this.x, this.y);
+        ctx.fillText('SCORE:' + gameScore, 10, 30);
+        this.hCount++;
+        if (this.hCount % 3 == 0) { // 同时生成三颗子弹
+            this.n == 32 && (this.n = 0); 
+            hullet.push(new Hullet(this.n));
+            this.n == 0 && (this.n = -32);
+            hullet.push(new Hullet(this.n));
+            this.n == -32 && (this.n = 32);
+            hullet.push(new Hullet(this.n));
+            this.hCount = 0;
+        }
+        this.eCount++;
+        if (this.eCount % 8 == 0) { //生成敌机
+            liveEnemy.push(new Enemy());
+            this.eCount = 0;
+        }
     }
     this.hit = function() { //判断是自己是否被击中
-      for (var i = 0; i < liveEnemy.length; i++) {
-        var d = liveEnemy[i];
-        // 敌机与自己的碰撞检测
-        var px, py;  
-        px = this.x <= d.x ? d.x : this.x;  
-        py = this.y <= d.y ? d.y : this.y;  
-        // 判断点
-        if (px >= this.x && px <= this.x + heroImg[0].width && py >= this.y && py <= this.y + heroImg[0].height && px >= d.x && px <= d.x + d.width && py >= d.y && py <= d.y + d.height) {  
-          this.life++;
-          if(this.life>30){
-            if(this.index<=2){
-              this.index=3;
-            }
-            this.index++; 
-            this.life=0;
-          } 
-        } 
-      }
+        for (var i = 0; i < liveEnemy.length; i++) {
+            var d = liveEnemy[i];
+            // 敌机与自己的碰撞检测
+            var px, py;  
+            px = this.x <= d.x ? d.x : this.x;  
+            py = this.y <= d.y ? d.y : this.y;  
+            // 判断点
+            if (px >= this.x && px <= this.x + heroImg[0].width && py >= this.y && py <= this.y + heroImg[0].height && px >= d.x && px <= d.x + d.width && py >= d.y && py <= d.y + d.height) {  
+            this.life++;
+            if(this.life>30){
+                if(this.index<=2){
+                this.index=3;
+                }
+                this.index++; 
+                this.life=0;
+            } 
+            } 
+        }
     }
 
     function move(e) {
-      if (curPhase == PHASE_PLAY || curPhase == PHASE_PAUSE) {
-        curPhase = PHASE_PLAY;
-        var offsetX = e.offsetX || e.touches[0].pageX;
-        var offsetY = e.offsetY || e.touches[0].pageY;
-        var w = heroImg[0].width,
-            h = heroImg[0].height;
-        var nx = offsetX - w / 2,
-            ny = offsetY - h / 2;
-        nx < 20 - w / 2 ? nx = 20 - w / 2 : nx > (canvas.width - w / 2 - 20) ? nx = (canvas.width - w / 2 - 20) : 0;
-        ny < 0 ? ny = 0 : ny > (canvas.height - h / 2) ? ny = (canvas.height - h / 2) : 0;
-        hero.x = nx;
-        hero.y = ny;
-        hero.count = 2;
-      }
+        if (curPhase == PHASE_PLAY || curPhase == PHASE_PAUSE) {
+            curPhase = PHASE_PLAY;
+            var offsetX = e.offsetX || e.touches[0].pageX;
+            var offsetY = e.offsetY || e.touches[0].pageY;
+            var w = heroImg[0].width,
+                h = heroImg[0].height;
+            var nx = offsetX - w / 2,
+                ny = offsetY - h / 2;
+            nx < 20 - w / 2 ? nx = 20 - w / 2 : nx > (canvas.width - w / 2 - 20) ? nx = (canvas.width - w / 2 - 20) : 0;
+            ny < 0 ? ny = 0 : ny > (canvas.height - h / 2) ? ny = (canvas.height - h / 2) : 0;
+            hero.x = nx;
+            hero.y = ny;
+            hero.count = 2;
+        }
     }
     // 绑定鼠标移动和手指触摸事件，控制hero移动
     canvas.addEventListener("mousemove", move, false);

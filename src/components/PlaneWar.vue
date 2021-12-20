@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-16 16:46:29
- * @LastEditTime: 2021-12-20 11:34:43
+ * @LastEditTime: 2021-12-20 15:47:29
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\components\PlaneWar.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -97,6 +97,41 @@ export default {
         }
     },
     methods: {
+        // 鼠标移动
+        move(e) {
+            if (this.curPhase == this.PHASE_PLAY || this.curPhase == this.PHASE_PAUSE) {
+                this.curPhase = this.PHASE_PLAY;
+                this.offsetX = e.offsetX || e.touches[0].pageX;
+                this.offsetY = e.offsetY || e.touches[0].pageY;
+                this.w = this.heroImg[0].width
+                this.h = this.heroImg[0].height
+                this.nx = this.offsetX - this.w / 2,
+                this.ny = this.offsetY - this.h / 2;
+                this.nx < 20 - this.w / 2 ? this.nx = 20 - this.w / 2 : this.nx > (this.canvas.width - this.w / 2 - 20) ? this.nx = (this.canvas.width - this.w / 2 - 20) : 0;
+                this.ny < 0 ? this.ny = 0 : this.ny > (this.canvas.height - this.h / 2) ? this.y = (this.canvas.height - this.h / 2) : 0;
+                this.x = this.nx;
+                this.y = this.ny;
+                this.count = 2;
+            }
+        },
+        // 初始化战机
+        drawHero() {
+            this.ctx.drawImage(this.heroImg[this.index], this.x, this.y);
+            this.ctx.fillText('SCORE:' + this.gameScore, 10, 30);
+            this.hCount++;
+            // if (this.hCount % 3 == 0) { // 同时生成三颗子弹
+            //     this.n == 32 && (this.n = 0); 
+            //     this.n == 0 && (this.n = -32);
+            //     this.n == -32 && (this.n = 32);
+            //     this.hCount = 0;
+            // }
+            this.eCount++;
+            // if (this.eCount % 8 == 0) { //生成敌机
+            //     this.liveEnemy.push(new Enemy());
+            //     this.eCount = 0;
+            // }
+        },
+        // 初始化画布
         init() {
             this.width = window.innerWidth > 480 ? 480 : window.innerWidth
             this.height = window.innerHeight > 650 ? 650 : window.innerHeight - 20
@@ -108,8 +143,18 @@ export default {
             this.download()
             this.pBg = this.paintBg()
             this.load = this.loading()
+            // 绑定鼠标移动和手指触摸事件，控制hero移动
+            this.canvas.addEventListener("mousemove", this.move, false);
+            this.canvas.addEventListener("touchmove", this.move, false);
+            // 鼠标移除时游戏暂停
+            this.canvas.onmouseout = () => {
+                if (this.curPhase == this.PHASE_PLAY) {
+                    this.curPhase = this.PHASE_PAUSE;
+                }
+            }
             setInterval(this.gameEngine, 50);
         },
+        // 加载所有图片
         download() {
             this.bg = this.nImg(this.imgName[0]);
             this.pause = this.nImg(this.imgName[1]);
@@ -179,14 +224,15 @@ export default {
         },
         // loading
         loading() {
-            this.index = 0;
-
+            let index = 0;
+            let position = 0
             function loading() {
-                this.index % 1 == 0 && this.ctx.drawImage(this.gameLoad[this.index], 0, this.canvas.height - this.gameLoad[0].height);
-                this.index += 0.5;
-                if (this.index > 3) {
-                    this.curPhase = this.PHASE_PLAY;
-                    this.index =0;
+                this.ctx.drawImage(this.gameLoad[Math.floor(index)], position, this.canvas.height - this.gameLoad[0].height)
+                index += 0.1
+                position += (this.canvas.width - this.gameLoad[0].width) / 30
+                if (index > 3) {
+                    this.curPhase = this.PHASE_PLAY
+                    index = 0
                 }
             }
             return loading;
@@ -216,6 +262,7 @@ export default {
                     break;
                 case this.PHASE_PLAY:
                     this.pBg();
+                    this.drawHero()
                     break;
                 case this.PHASE_PAUSE:
                     this.drawPause();
