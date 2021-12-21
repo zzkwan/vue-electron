@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-21 10:53:57
- * @LastEditTime: 2021-12-21 20:20:08
+ * @LastEditTime: 2021-12-21 20:32:49
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\components\list.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -117,19 +117,19 @@ export default {
     handleMine(item) {
       switch (item.level){
         case 0:
-          this.mineSweeping = store.get('mineSweeping.low')
+          this.mineSweeping = store.get('mineSweeping.low', [])
           break
         case 1:
-          this.mineSweeping = store.get('mineSweeping.low_mid')
+          this.mineSweeping = store.get('mineSweeping.low_mid', [])
           break
         case 2:
-          this.mineSweeping = store.get('mineSweeping.mid')
+          this.mineSweeping = store.get('mineSweeping.mid', [])
           break
         case 3:
-          this.mineSweeping = store.get('mineSweeping.mid_high')
+          this.mineSweeping = store.get('mineSweeping.mid_high', [])
           break
         case 4:
-          this.mineSweeping = store.get('mineSweeping.high')
+          this.mineSweeping = store.get('mineSweeping.high', [])
           break
       }
       this.mineSweeping.sort(function(a, b){return a - b})
@@ -139,16 +139,16 @@ export default {
     handlePlane(item) {
       switch (item.value){
         case 0:
-          this.planeList = store.get('planeList.low')
+          this.planeList = store.get('planeList.low', [])
           break
         case 1:
-          this.planeList = store.get('planeList.low_mid')
+          this.planeList = store.get('planeList.low_mid', [])
           break
         case 2:
-          this.planeList = store.get('planeList.mid')
+          this.planeList = store.get('planeList.mid', [])
           break
         case 3:
-          this.planeList = store.get('planeList.high')
+          this.planeList = store.get('planeList.high', [])
           break
       }
       this.planeList.sort(function(a, b){return b - a})
