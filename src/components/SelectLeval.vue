@@ -1,18 +1,18 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-14 15:37:12
- * @LastEditTime: 2021-12-21 11:06:05
+ * @LastEditTime: 2021-12-21 19:59:17
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\components\SelectLeval.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
 -->
 <template>
     <div class="main">
-      <el-tabs  @tab-click="handleClick">
+      <el-tabs @tab-click="handleClick">
         <el-tab-pane label="扫雷" name="first">
           <div>选择难度</div>
           <ul>
-            <li v-for="(item, index) in level" :key="index" @click="handleChoseLevel(item.value)">{{ item.text }}</li>
+            <li v-for="(item, index) in level" :key="index" @click="handleChoseLevel(item.value, item.level)">{{ item.text }}</li>
           </ul>
         </el-tab-pane>
         <el-tab-pane label="贪吃蛇" name="second">
@@ -26,15 +26,17 @@
           </ul>
 				</el-tab-pane>
         <el-tab-pane label="飞机大战" name="fourth">
-					<div>选择难度</div>
+					<div>选择机型与难度</div>
           <ul v-if="isplane">
             <li v-for="(item, index) in planes" :key="index" @click="handlePlane(item.value)">{{ item.text }}</li>
           </ul>
 					<ul v-else>
 						<li v-for="(item, index) in planeLevel" :key="index" @click="handlePlaneWarLevel(item.value)">{{ item.text }}</li>
 					</ul>
+				</el-tab-pane>
+				<el-tab-pane label="排行榜" name="fifth">
 					<ul>
-            <li @click="getList"> 排行榜 </li>
+            <li @click="getList"> 查看排行榜 </li>
           </ul>
 				</el-tab-pane>
       </el-tabs>
@@ -56,18 +58,23 @@ export default {
 			// 难度
 			level: [
 				{
+					level: 0, // 等级
 					text: '青铜', // 难度描述
 					value: [9, 9, 10] // 格子横排数，格子纵排数，雷数
 				}, {
+					level: 1, // 等级
 					text: '黄金',
 					value: [12, 9, 20] 
 				}, {
+					level: 2, // 等级
 					text: '钻石',
 					value: [16, 9, 30]  
 				}, {
+					level: 3, // 等级
 					text: '星耀',
 					value: [16, 16, 50]  
 				}, {
+					level: 4, // 等级
 					text: '王者',
 					value: [30, 16, 99]  
 				}
@@ -110,8 +117,8 @@ export default {
 	},
 	methods: {
 		// 选择扫雷难度
-		handleChoseLevel(level) {
-      this.$emit("chose-level", level);
+		handleChoseLevel(map, level) {
+      this.$emit("chose-level", map, level);
 		},
     // 选择贪吃蛇难度
     handleSnackLevel() {

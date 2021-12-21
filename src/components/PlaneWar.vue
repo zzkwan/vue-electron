@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-16 16:46:29
- * @LastEditTime: 2021-12-21 10:58:29
+ * @LastEditTime: 2021-12-21 20:23:52
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\components\PlaneWar.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -18,8 +18,9 @@
             <div>你的小宝贝没了！！！！</div>
             <div>最终成绩：{{ gameScore }}</div>
             <span slot="footer" class="dialog-footer">
-            <el-button @click="closeGame">更换游戏</el-button>
-            <el-button type="primary" @click="start">重新开始</el-button>
+                <el-button @click="upload">上传分数</el-button>
+                <el-button @click="closeGame">更换游戏</el-button>
+                <el-button type="primary" @click="start">重新开始</el-button>
             </span>
         </el-dialog>
     </div>
@@ -32,7 +33,7 @@ export default {
             required: true,
             type: Number
         },
-        planeLevel: {
+        planeLevel: { // 飞机难度
             required: true,
             type: Number
         }
@@ -100,6 +101,7 @@ export default {
             tims: 0,// 计算整体经过的时间
             controller: 0,// 控制小中大型飞机出现几率
             subWidth: 0,// 控制战机碰到敌机的大小
+            isUpload: true,// 是否允许上传
             n: 0,
             life: 0,
             d: 0,
@@ -221,6 +223,7 @@ export default {
                     } else {
                         that.level < 2 && that.level++
                     }
+                    that.gameScore += 300
                     u.removable = true; // 碰撞后的奖励标识为可移除
                 }
             }
@@ -381,6 +384,63 @@ export default {
             }
             setInterval(this.gameEngine, 50);
         },
+        // 上传分数
+        upload() {
+            if (this.isUpload) {
+                const Store = require('electron-store')
+                const store = new Store()
+                let data = store.get('planeList', {low:[],low_mid:[],mid:[],high:[]})
+                if (this.planeLevel === 0) {
+                    data.low.sort(function(a, b){return b - a})
+                    if (data.low.length >= 10) {
+                        if (data.low[data.low.length-1] > this.gameScore) {
+                            data.low[data.low.length-1] = this.gameScore
+                        }
+                    } else {
+                        data.low[data.low.length] = this.gameScore
+                    }
+                } else if (this.planeLevel === 1) {
+                    data.low_mid.sort(function(a, b){return b - a})
+                    if (data.low_mid.length >= 10) {
+                        if (data.low_mid[data.low_mid.length-1] > this.gameScore) {
+                            data.low_mid[data.low_mid.length-1] = this.gameScore
+                        }
+                    } else {
+                        data.low_mid[data.low_mid.length] = this.gameScore
+                    }
+                } else if (this.planeLevel === 2) {
+                    data.mid.sort(function(a, b){return b - a})
+                    if (data.mid.length >= 10) {
+                        if (data.mid[data.mid.length-1] > this.gameScore) {
+                            data.mid[data.mid.length-1] = this.gameScore
+                        }
+                    } else {
+                        data.mid[data.mid.length] = this.gameScore
+                    }
+                } else if (this.planeLevel === 3) {
+                    data.high.sort(function(a, b){return b - a})
+                    if (data.high.length >= 10) {
+                        if (data.high[data.high.length-1] > this.gameScore) {
+                            data.high[data.high.length-1] = this.gameScore
+                        }
+                    } else {
+                        data.high[data.high.length] = this.gameScore
+                    }
+                }
+                store.set('planeList', data)
+                this.isUpload = false
+                this.$message({
+                    message: '恭喜你，纪录上传成功',
+                    type: 'success'
+                });
+            } else {
+                this.$message({
+                    message: '请勿重复上传哦',
+                    type: 'warning'
+                });
+            }
+            this.dialogVisible = true
+        },
         // 加载所有图片
         download() {
             this.bg = this.nImg(this.imgName[0]);
@@ -428,8 +488,10 @@ export default {
         },
         // 开始游戏
         start() {
+            this.isUpload = true
             this.gameScore = 0
             this.level = 0
+            this.tims = 0
             this.hC = 1
             this.eC = 1
             this.uC = 1

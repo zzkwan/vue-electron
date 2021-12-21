@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-15 16:35:20
- * @LastEditTime: 2021-12-15 17:41:07
+ * @LastEditTime: 2021-12-21 19:52:57
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\components\Tetris.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -29,6 +29,8 @@
 <script>
 import GameCanvas from '@/components/GameCanvas.vue'
 import MenuBox from '@/components/MenuBox.vue'
+const Store = require('electron-store')
+const store = new Store()
 export default {
   name: 'Index',
   data () {
@@ -77,6 +79,7 @@ export default {
   methods: {
     newGame () {
       this.data.cur_points = 0
+      this.data.max_points = store.get('tetris', [])[0] ? store.get('tetris', [])[0] : 0
       this.data.speed = 1
       this.$refs.gameCanvas.newGame()// 调用gameCanvas里的newGame
       this.timer = setInterval(() => this.next(), 500 / this.data.speed)

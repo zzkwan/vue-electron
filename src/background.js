@@ -1,7 +1,7 @@
 /*
  * @Author: 卓智锴
  * @Date: 2021-12-14 16:17:56
- * @LastEditTime: 2021-12-14 16:40:44
+ * @LastEditTime: 2021-12-21 15:07:59
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\background.js
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -10,9 +10,11 @@
 
 import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+import electronStore from 'electron-store'
 // import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
+electronStore.initRenderer()
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }

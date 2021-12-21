@@ -37,6 +37,16 @@
                 <div @click="changeLevel">更换游戏</div>
             </div>
         </div>
+        <el-dialog
+            title="提示"
+            :visible.sync="dialogVisible"
+            width="30%">
+            <span>是否上传成绩</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="upload">上 传</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -54,10 +64,17 @@ export default {
         gameInfo: {
             required: true,
             type: Array
+        },
+        // 扫雷难度
+        mineSweepingLevel: {
+            require: true,
+            type: Number
         }
     },
 	data() {
 		return {
+            // 是否展示上传框
+            dialogVisible: false,
             // 横排格子数
             rows: 0,
             // 纵排格子数
@@ -95,18 +112,25 @@ export default {
         over(newVal) {
             switch(newVal) {
                 case 1:
-                    alert("BOOM，爱心轰炸");
+                    this.$message.error('boom，爱心轰炸！！！');
                     break;
                 case 2:
                     // eslint-disable-next-line no-case-declarations
                     const wrongMark = this.judgeWrongMark();
                     if (wrongMark) {
                         setTimeout(() => {
-                            alert(`你有${wrongMark}个爱心标记错啦`);
+                            this.$message({
+                                message: `你有${wrongMark}个爱心标记错啦！`,
+                                type: 'warning'
+                            })
                         }, 500);
                     } else {
                         this.openAllRest();
-                        alert("优秀，找出了全部的❤");
+                        this.$message({
+                            message: '优秀，找出了全部的❤',
+                            type: 'success'
+                        })
+                        this.dialogVisible = true
                     }
                     break;
                 default:
@@ -126,6 +150,65 @@ export default {
         });
     },
 	methods: {
+        // 上传成绩
+        upload() {
+            const Store = require('electron-store')
+            const store = new Store()
+            let data = store.get('mineSweeping', {low:[],low_mid:[],mid:[],mid_high:[],high:[]})
+            if (this.mineSweepingLevel === 0) {
+                data.low.sort(function(a, b){return a - b})
+                if (data.low.length >= 10) {
+                    if (data.low[data.low.length-1] > this.time) {
+                        data.low[data.low.length-1] = this.time
+                    }
+                } else {
+                    data.low[data.low.length] = this.time
+                }
+            } else if (this.mineSweepingLevel === 1) {
+                data.low_mid.sort(function(a, b){return a - b})
+                if (data.low_mid.length >= 10) {
+                    if (data.low_mid[data.low_mid.length-1] > this.time) {
+                        data.low_mid[data.low_mid.length-1] = this.time
+                    }
+                } else {
+                    data.low_mid[data.low_mid.length] = this.time
+                }
+            } else if (this.mineSweepingLevel === 2) {
+                data.mid.sort(function(a, b){return a - b})
+                if (data.mid.length >= 10) {
+                    if (data.mid[data.mid.length-1] > this.time) {
+                        data.mid[data.mid.length-1] = this.time
+                    }
+                } else {
+                    data.mid[data.mid.length] = this.time
+                }
+            } else if (this.mineSweepingLevel === 3) {
+                data.mid_high.sort(function(a, b){return a - b})
+                if (data.mid_high.length >= 10) {
+                    if (data.mid_high[data.mid_high.length-1] > this.time) {
+                        data.mid_high[data.mid_high.length-1] = this.time
+                    }
+                } else {
+                    data.mid_high[data.mid_high.length] = this.time
+                }
+            } else if (this.mineSweepingLevel === 4) {
+                data.high.sort(function(a, b){return a - b})
+                if (data.high.length >= 10) {
+                    if (data.high[data.high.length-1] > this.time) {
+                        data.high[data.high.length-1] = this.time
+                    }
+                } else {
+                    data.high[data.high.length] = this.time
+                }
+            }
+            store.set('mineSweeping', data)
+            this.isUpload = false
+            this.$message({
+                message: '恭喜你，纪录上传成功',
+                type: 'success'
+            });
+            this.dialogVisible = false
+        },
         // 初始化格子盘隐藏数据
         init() {
             Object.assign(this.$data, this.$options.data());

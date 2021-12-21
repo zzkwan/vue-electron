@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-15 11:20:45
- * @LastEditTime: 2021-12-20 20:38:07
+ * @LastEditTime: 2021-12-21 19:50:13
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\components\Snacks.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -30,8 +30,10 @@
     title="提示"
     :visible.sync="dialogVisible"
     width="30%">
-    <span>你的小宝贝没了！！！！</span>
+    <div>获得分数:{{ score }}</div>
+    <div>你的小宝贝没了！！！！</div>
     <span slot="footer" class="dialog-footer">
+      <el-button @click="upload">上传分数</el-button>
       <el-button @click="closeGame">更换游戏</el-button>
       <el-button type="primary" @click="restart">重新开始</el-button>
     </span>
@@ -41,7 +43,7 @@
 
 <script>
 export default {
-  data () {
+    data () {
       return {
         dialogVisible: false, // 弹框弹出判断
         timer: null, // 存储定时器
@@ -52,11 +54,42 @@ export default {
         nextMoveDirection: 1, // 将要移动的方向，0、1、2、3，上右下左
         snakeHead: {}, // 蛇头的坐标
         snakeTail: {}, // 蛇尾坐标
-        foodCoordinate: {} // 食物坐标
+        foodCoordinate: {}, // 食物坐标
+        score: 0, // 分数
+        isUpload: true
       }
     },
     methods: {
+      // 上传成绩
+      upload() {
+        if (this.isUpload) {
+          const Store = require('electron-store')
+          const store = new Store()
+          let data = store.get('snacks', [])
+          data.sort(function(a, b){return b - a})
+          if (data.length >= 10) {
+              if (data[data.length-1] > this.score) {
+                  data[data.length-1] = this.score
+              }
+          } else {
+              data[data.length] = this.score
+          }
+          store.set('snacks', data)
+          this.isUpload = false
+          this.$message({
+              message: '恭喜你，纪录上传成功',
+              type: 'success'
+          });
+        } else {
+          this.$message({
+              message: '请勿重复上传哦',
+              type: 'warning'
+          });
+        }
+      },
       async restart() {
+        this.isUpload = true
+        this.score = 0
         this.dialogVisible = false
         await this.initializationGrid(); // 初始化网格
         this.initializationSnake(); // 初始化蛇
@@ -106,6 +139,7 @@ export default {
       whetherEatFood () { // 是否吃到食物判断
         let state = JSON.stringify(this.snakeHead) === JSON.stringify(this.foodCoordinate); // 判断食物和蛇头是否在一个坐标上
         if (state) { // 吃到了
+          this.score++
           this.generateFood(); // 生成食物
           this.integralRule(); // 走积分
           this.increaseDifficulty(); // 增加难度

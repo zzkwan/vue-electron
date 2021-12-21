@@ -1,7 +1,7 @@
 /*
  * @Author: 卓智锴
  * @Date: 2021-12-15 10:55:20
- * @LastEditTime: 2021-12-15 10:55:20
+ * @LastEditTime: 2021-12-21 15:01:58
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\vue.config.js
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -35,7 +35,8 @@ module.exports = {
           perMachine: true, //应用所有用户
           allowToChangeInstallationDirectory: true //用户可以选择路径
         }
-      }
+      },
+      nodeIntegration: true
     }
   }
 };

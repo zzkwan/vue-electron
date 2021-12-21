@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-15 17:07:45
- * @LastEditTime: 2021-12-21 11:09:26
+ * @LastEditTime: 2021-12-21 16:19:46
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\views\index.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -12,6 +12,7 @@
 			v-if="showGame"
 			:show-game="showGame"
 			:game-info="gameInfo"
+			:mine-sweeping-level="mineSweepingLevel"
       @closeGame="closeGame"
 		/>
     <Snacks
@@ -74,6 +75,8 @@ export default {
 			showPlaneWar: false,
 			// 游戏盘格子数和雷数
 			gameInfo: [8, 8, 10],
+			// 扫雷难度
+			mineSweepingLevel: 0,
 			// 飞机种类选择
 			chosePlane: 0,
 			// 飞机难度选择
@@ -84,8 +87,9 @@ export default {
 	},
 	methods: {
 		// 选择难度
-		choseLevel(level) {
-			this.gameInfo = level;
+		choseLevel(map, level) {
+			this.gameInfo = map;
+			this.mineSweepingLevel = level
 			this.showGame = true;
       this.showLevel = false;
 		},
