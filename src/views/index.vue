@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-15 17:07:45
- * @LastEditTime: 2021-12-20 20:20:46
+ * @LastEditTime: 2021-12-21 11:09:26
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\views\index.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -25,6 +25,7 @@
 		<PlaneWar 
 			v-if="showPlaneWar"
 			:chose-plane="chosePlane"
+			:plane-level="planeLevel"
 			@closeGame="closeGame"
 		/>
 		<select-level 
@@ -33,11 +34,17 @@
       @snack-chose="snackchose"
       @tetris-chose="tetrischose"
 			@planeWar-chose="planeWarchose"
+			@open-list="openList"
     />
+		<List
+			v-if="showList"
+			@leave-list="leaveList"
+		/>
 	</div>
 </template>
 
 <script>
+import List from ".././components/list"
 import SelectLevel from ".././components/SelectLeval";
 import MineSweeping from ".././components/MineSweeping";
 import Snacks from ".././components/Snacks"
@@ -50,7 +57,8 @@ export default {
 		MineSweeping,
     Snacks,
 		Tetris,
-		PlaneWar
+		PlaneWar,
+		List
 	},
 	data() {
 		return {
@@ -67,7 +75,11 @@ export default {
 			// 游戏盘格子数和雷数
 			gameInfo: [8, 8, 10],
 			// 飞机种类选择
-			chosePlane: 0
+			chosePlane: 0,
+			// 飞机难度选择
+			planeLevel: 0,
+			// 展示排行榜
+			showList: false
 		}
 	},
 	methods: {
@@ -89,8 +101,9 @@ export default {
 			this.showLevel = false
 		},
 		// 选择飞机大战游戏
-		planeWarchose(val) {
-			this.chosePlane = val
+		planeWarchose(planeType, planeLevel) {
+			this.chosePlane = planeType
+			this.planeLevel = planeLevel
 			this.showPlaneWar = true
 			this.showLevel = false
 		},
@@ -100,8 +113,19 @@ export default {
 			this.showTetris = false
       this.showGame = false
       this.showSnack = false
+			this.showList = false
       this.showLevel = true
-    }
+    },
+		// 打开排行榜
+		openList() {
+			this.showList = true
+			this.showLevel = false
+		},
+		// 关闭排行榜
+		leaveList() {
+			this.showLevel = true
+			this.showList = false
+		}
 	}
 }
 </script>	

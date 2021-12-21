@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-16 16:46:29
- * @LastEditTime: 2021-12-20 20:33:06
+ * @LastEditTime: 2021-12-21 10:58:29
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\components\PlaneWar.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -32,6 +32,10 @@ export default {
             required: true,
             type: Number
         },
+        planeLevel: {
+            required: true,
+            type: Number
+        }
     },
     data() {
         return {
@@ -89,8 +93,13 @@ export default {
             count: 0,// 控制hero图片切换的频率
             hCount: 0,// 控制子弹发射
             hC: 1,// 控制子弹发射的频率
-            eCount: 0,// 控制敌机发射的频率
-            upCount: 0,// 控制奖励出现的频率
+            eCount: 0,// 控制敌机发射
+            eC: 1,// 控制敌机出现频率
+            upCount: 0,// 控制奖励出现
+            uC: 1, // 控制奖励出现的频率
+            tims: 0,// 计算整体经过的时间
+            controller: 0,// 控制小中大型飞机出现几率
+            subWidth: 0,// 控制战机碰到敌机的大小
             n: 0,
             life: 0,
             d: 0,
@@ -144,13 +153,13 @@ export default {
             this.ctx.drawImage(this.heroImg[this.chosePlane], this.x, this.y);
             this.ctx.fillText('SCORE:' + this.gameScore, 10, 30);
             this.hCount += this.hC;
-            if (this.level === 0 && this.hCount / 5 >= 1) { // 同时生成一颗子弹
+            if (this.level === 0 && this.hCount / (this.planeLevel === 0 ? 5 : this.planeLevel === 1 ? 6 : this.planeLevel === 2 ? 7 : this.planeLevel === 3 ? 8 : 10) >= 1) { // 同时生成一颗子弹
                 this.n == 32 && (this.n = 0); 
                 this.hullet.push(this.createHullet(this.n))
                 this.n = 32
                 this.hCount = 0;
             }
-            if (this.level === 1 && this.hCount / 5 >= 1) { // 同时生成两颗子弹
+            if (this.level === 1 && this.hCount / (this.planeLevel === 0 ? 5 : this.planeLevel === 1 ? 6 : this.planeLevel === 2 ? 7 : this.planeLevel === 3 ? 8 : 10) >= 1) { // 同时生成两颗子弹
                 this.n == 32 && (this.n = -32); 
                 this.hullet.push(this.createHullet(this.n))
                 this.n == -32 && (this.n = 32);
@@ -158,7 +167,7 @@ export default {
                 this.n == 32
                 this.hCount = 0;
             }
-            if (this.level === 2 && this.hCount / 5 >= 1) { // 同时生成三颗子弹
+            if (this.level === 2 && this.hCount / (this.planeLevel === 0 ? 5 : this.planeLevel === 1 ? 6 : this.planeLevel === 2 ? 7 : this.planeLevel === 3 ? 8 : 10) >= 1) { // 同时生成三颗子弹
                 this.n == 32 && (this.n = 0); 
                 this.hullet.push(this.createHullet(this.n));
                 this.n == 0 && (this.n = -32);
@@ -167,14 +176,15 @@ export default {
                 this.hullet.push(this.createHullet(this.n));
                 this.hCount = 0;
             }
-            this.eCount++;
-            if (this.eCount % 8 == 0) { //生成敌机
+            this.eCount += this.eC
+            if (this.eCount / (this.planeLevel === 0 ? 12 : this.planeLevel === 1 ? 10 : this.planeLevel === 2 ? 8 : this.planeLevel === 3 ? 7 : 6) >= 1) { //生成敌机
                 this.liveEnemy.push(this.createEnemy());
                 this.eCount = 0;
             }
-            this.upCount++
-            if (this.upCount % 100 == 0) {
+            this.upCount += this.uC
+            if (this.upCount / 100 >= 1) {
                 this.ups.push(this.createUp())
+                this.upCount = 0
             }
         },
         // 创建奖励
@@ -199,7 +209,15 @@ export default {
                 if (u.x + u.width >= that.x && that.x + that.heroImg[this.chosePlane].width >= u.x &&
                     that.y + that.heroImg[this.chosePlane].height >= u.y && u.height + u.y >= that.y) {
                     if (Math.random() * 3 > 1) {
-                        that.hC++
+                        if (that.planeLevel === 0) {
+                            that.hC += 1.5
+                        } else if (that.planeLevel === 1) {
+                            that.hC += 1.3
+                        } else if (that.planeLevel === 2) {
+                            that.hC += 1
+                        } else {
+                            that.hC += 0.5
+                        }
                     } else {
                         that.level < 2 && that.level++
                     }
@@ -226,11 +244,11 @@ export default {
             E.enemy = null; // 保存敌机图片
             E.speed = 0; // 敌机的速度
             E.lifes = 2; // 敌机的生命值
-            if (E.n < 1) { // 不同大小的敌机随机出现
+            if (E.n < 1 && this.controller >= 2) { // 不同大小的敌机随机出现
                 E.enemy = this.enemy3[0]; 
                 E.speed = 2;
                 E.lifes = 50;
-            } else if (E.n < 6) {
+            } else if (E.n < 6 && this.controller >= 1) {
                 E.enemy = this.enemy2[0];
                 E.speed = 4;
                 E.lifes = 10;
@@ -246,7 +264,7 @@ export default {
             E.removable = false;
             // 标识敌机是否狗带，若狗带就画它的爆炸图(也就是遗像啦)
             E.die = false;
-            E.draw = (E) => {
+            E.draw = (E, that) => {
                 // 处理不同敌机的爆炸图轮番上阵
                 if (E.speed == 2) {
                     if (E.die) {
@@ -273,29 +291,29 @@ export default {
                 }
                 this.ctx.drawImage(E.enemy, E.x, E.y);
                 E.y += E.speed; // 移动敌机
-                E.hit(E); //判断是否击中敌机
+                E.hit(E, that); //判断是否击中敌机
                 if (E.y > this.canvas.height) { // 若敌机飞出画布，就标识可移除(让你不长眼！)
                     E.removable = true;
                 }
             }
-            E.hit = (E) => { //判断是否击中敌机
-                for (let i = 0; i < this.hullet.length; i++) {
-                    let h = this.hullet[i];
+            E.hit = (E, that) => { //判断是否击中敌机
+                for (let i = 0; i < that.hullet.length; i++) {
+                    let h = that.hullet[i];
                     // 敌机与子弹的碰撞检测，自己体会吧
                     if (E.x + E.width >= h.mx && h.mx + h.width >= E.x &&
                         h.my + h.height >= E.y && E.height + E.y >= h.my) {
                         if (--E.lifes == 0) { // 若生命值为零，标识为死亡
                             E.die = true;
                             // 计分
-                            this.gameScore += E.speed == 6 ? 10 : this.speed == 4 ? 20 : 100;
+                            that.gameScore += E.speed == 6 ? 10 : E.speed == 4 ? 20 : 100;
                         }
                         h.removable = true; // 碰撞后的子弹标识为可移除
                     }
                 }
-                // 敌机与子弹的碰撞检测，自己体会吧
-                if (E.x + E.width >= this.x && this.x + this.heroImg[this.chosePlane].width >= E.x &&
-                    this.y + this.heroImg[this.chosePlane].height >= E.y && E.height + E.y >= this.y) {
-                    this.curPhase = this.PHASE_GAMEOVER; // 碰撞后游戏结束
+                // 敌机与战机的碰撞检测
+                if (E.x + E.width >= that.x + that.subWidth && that.x + that.heroImg[that.chosePlane].width - that.subWidth >= E.x &&
+                    that.y + that.heroImg[that.chosePlane].height - that.subWidth >= E.y && E.height + E.y >= that.y + that.subWidth) {
+                    that.curPhase = that.PHASE_GAMEOVER; // 碰撞后游戏结束
                 }
             }
             return E
@@ -308,7 +326,7 @@ export default {
                 }
             }
             for (let i = 0; i < this.liveEnemy.length; i++) {
-                this.liveEnemy[i].draw(this.liveEnemy[i]);
+                this.liveEnemy[i].draw(this.liveEnemy[i], this);
             }
         },
         // 创建子弹
@@ -410,14 +428,19 @@ export default {
         },
         // 开始游戏
         start() {
+            this.gameScore = 0
             this.level = 0
             this.hC = 1
+            this.eC = 1
+            this.uC = 1
+            this.controller = 0
             this.position = 0
             this.liveEnemy = []
             this.ups = []
             this.hullet = []
             this.dialogVisible = false
             this.curPhase = this.PHASE_READY;
+            this.planeLevel === 0 ? this.subWidth = 20 : this.planeLevel === 1 ? this.subWidth = 15 : this.planeLevel === 2 ? this.subWidth = 12 : this.planeLevel === 3 ? this.subWidth = 8 : this.subWidth = 5
             this.canvas.onclick = () => {
                 this.curPhase == this.PHASE_READY && (this.curPhase = this.PHASE_LOADING);
             }
@@ -460,7 +483,6 @@ export default {
         // 游戏结束
         gameover(){
             this.dialogVisible = true
-            this.gameScore=0;  
             this.curPhase =this.PHASE_READY;  
         },
         // 游戏引擎
@@ -475,6 +497,18 @@ export default {
                     this.load();
                     break;
                 case this.PHASE_PLAY:
+                    if (this.tims > 100) {
+                        this.tims = 0
+                        this.eC += 0.2
+                        if (this.controller < 2) {
+                            this.controller++
+                        }
+                        if (this.uC > 0){
+                            this.uC -= 0.01
+                        } else {
+                            this.uC = 0
+                        }
+                    }
                     this.pBg();
                     this.drawHero()
                     this.drawHullet()
@@ -488,6 +522,7 @@ export default {
                     this.gameover();
                     break;    
             }
+            this.tims++
             //requestAnimationFrame(gameEngine);
         },
         closeGame() {

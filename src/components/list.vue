@@ -1,41 +1,23 @@
 <!--
  * @Author: 卓智锴
- * @Date: 2021-12-14 15:37:12
- * @LastEditTime: 2021-12-21 11:06:05
+ * @Date: 2021-12-21 10:53:57
+ * @LastEditTime: 2021-12-21 11:09:09
  * @LastEditors: Do not edit
- * @FilePath: \vue-electron\src\components\SelectLeval.vue
+ * @FilePath: \vue-electron\src\components\list.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
 -->
 <template>
     <div class="main">
+      <el-page-header @back="goBack" content="排行榜">
+      </el-page-header>
       <el-tabs  @tab-click="handleClick">
         <el-tab-pane label="扫雷" name="first">
-          <div>选择难度</div>
-          <ul>
-            <li v-for="(item, index) in level" :key="index" @click="handleChoseLevel(item.value)">{{ item.text }}</li>
-          </ul>
         </el-tab-pane>
         <el-tab-pane label="贪吃蛇" name="second">
-          <ul>
-            <li @click="handleSnackLevel()"> 开始游戏 </li>
-          </ul>
         </el-tab-pane>
         <el-tab-pane label="俄罗斯方块" name="third">
-					<ul>
-            <li @click="handleTetrisLevel()"> 开始游戏 </li>
-          </ul>
 				</el-tab-pane>
         <el-tab-pane label="飞机大战" name="fourth">
-					<div>选择难度</div>
-          <ul v-if="isplane">
-            <li v-for="(item, index) in planes" :key="index" @click="handlePlane(item.value)">{{ item.text }}</li>
-          </ul>
-					<ul v-else>
-						<li v-for="(item, index) in planeLevel" :key="index" @click="handlePlaneWarLevel(item.value)">{{ item.text }}</li>
-					</ul>
-					<ul>
-            <li @click="getList"> 排行榜 </li>
-          </ul>
 				</el-tab-pane>
       </el-tabs>
     </div>
@@ -43,12 +25,10 @@
 
 <script>
 export default {
-	name: "index",
+	name: "list",
 	components: { },
 	data() {
 		return {
-			// 打开排行榜
-			showList: false,
 			// 是否点击难度
 			isplane: true,
 			// 选择飞机类型
@@ -109,35 +89,10 @@ export default {
 		}
 	},
 	methods: {
-		// 选择扫雷难度
-		handleChoseLevel(level) {
-      this.$emit("chose-level", level);
-		},
-    // 选择贪吃蛇难度
-    handleSnackLevel() {
-      this.$emit("snack-chose")
-    },
-		// 选择俄罗斯方块
-		handleTetrisLevel() {
-			this.$emit("tetris-chose")
-		},
-		// 选择飞机大战
-		handlePlane(val) {
-			this.isplane = false
-			this.planeType = val
-		},
-		// 选择飞机大战难度
-		handlePlaneWarLevel(chose) {
-			this.$emit("planeWar-chose", this.planeType, chose)
-		},
-		// 页签切换
-		handleClick() {
-			this.isplane = true
-		},
-		// 查看飞机大战排行
-		getList() {
-			this.$emit("open-list")
-		}
+		// 离开排行榜
+		goBack() {
+      this.$emit('leave-list')
+    }
 	}
 };
 </script>
