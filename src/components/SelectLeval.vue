@@ -1,46 +1,46 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-14 15:37:12
- * @LastEditTime: 2021-12-21 19:59:17
+ * @LastEditTime: 2021-12-23 17:45:51
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\components\SelectLeval.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
 -->
 <template>
-    <div class="main">
-      <el-tabs @tab-click="handleClick">
-        <el-tab-pane label="扫雷" name="first">
-          <div>选择难度</div>
-          <ul>
-            <li v-for="(item, index) in level" :key="index" @click="handleChoseLevel(item.value, item.level)">{{ item.text }}</li>
-          </ul>
-        </el-tab-pane>
-        <el-tab-pane label="贪吃蛇" name="second">
-          <ul>
-            <li @click="handleSnackLevel()"> 开始游戏 </li>
-          </ul>
-        </el-tab-pane>
-        <el-tab-pane label="俄罗斯方块" name="third">
+		<el-card class="main">
+			<el-tabs @tab-click="handleClick">
+				<el-tab-pane label="扫雷" name="first">
+					<div>选择难度</div>
 					<ul>
-            <li @click="handleTetrisLevel()"> 开始游戏 </li>
-          </ul>
+						<li v-for="(item, index) in level" :key="index" @click="handleChoseLevel(item.value, item.level)">{{ item.text }}</li>
+					</ul>
 				</el-tab-pane>
-        <el-tab-pane label="飞机大战" name="fourth">
+				<el-tab-pane label="贪吃蛇" name="second">
+					<ul>
+						<li @click="handleSnackLevel()"> 开始游戏 </li>
+					</ul>
+				</el-tab-pane>
+				<el-tab-pane label="俄罗斯方块" name="third">
+					<ul>
+						<li @click="handleTetrisLevel()"> 开始游戏 </li>
+					</ul>
+				</el-tab-pane>
+				<el-tab-pane label="飞机大战" name="fourth">
 					<div>选择机型与难度</div>
-          <ul v-if="isplane">
-            <li v-for="(item, index) in planes" :key="index" @click="handlePlane(item.value)">{{ item.text }}</li>
-          </ul>
+					<ul v-if="isplane">
+						<li v-for="(item, index) in planes" :key="index" @click="handlePlane(item.value)">{{ item.text }}</li>
+					</ul>
 					<ul v-else>
 						<li v-for="(item, index) in planeLevel" :key="index" @click="handlePlaneWarLevel(item.value)">{{ item.text }}</li>
 					</ul>
 				</el-tab-pane>
 				<el-tab-pane label="排行榜" name="fifth">
 					<ul>
-            <li @click="getList"> 查看排行榜 </li>
-          </ul>
+						<li @click="getList"> 查看排行榜 </li>
+					</ul>
 				</el-tab-pane>
-      </el-tabs>
-    </div>
+			</el-tabs>
+		</el-card>
 </template>
 
 <script>
@@ -150,17 +150,19 @@ export default {
 </script>
 <style lang="scss" scoped>
 .main {
-    margin: 0 auto;
+	margin: 0 auto;
 	padding: 10px;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-	border: 2px dashed #0b7777;
-    border-radius: 5px;
-	width: 50%;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	// border: 2px dashed rgb(250, 245, 235);
+	border-radius: 5px;
+	width: 80%;
+	height: 70%;
 	font-size: 18px;
 	text-align: center;
-	color: #0b7777;
+	background-color: rgba(255, 255, 255, 0.6);
+	color: #409EFF;
 	ul {
 		li {
 			margin: 10px 0;

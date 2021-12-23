@@ -1,13 +1,13 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-21 10:53:57
- * @LastEditTime: 2021-12-21 20:32:49
+ * @LastEditTime: 2021-12-23 19:49:03
  * @LastEditors: Do not edit
  * @FilePath: \vue-electron\src\components\list.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
 -->
 <template>
-    <div class="main">
+    <el-card class="main">
       <el-page-header @back="goBack" content="排行榜">
       </el-page-header>
       <el-tabs @tab-click="handleClick">
@@ -40,7 +40,7 @@
           <div v-if="!isplane" @click="back">返回</div>
 				</el-tab-pane>
       </el-tabs>
-    </div>
+		</el-card>
 </template>
 
 <script>
@@ -173,17 +173,19 @@ export default {
 </script>
 <style lang="scss" scoped>
 .main {
-    margin: 0 auto;
+	margin: 0 auto;
 	padding: 10px;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-	border: 2px dashed #0b7777;
-    border-radius: 5px;
-	width: 50%;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	// border: 2px dashed rgb(250, 245, 235);
+	border-radius: 5px;
+	width: 80%;
+	height: 70%;
 	font-size: 18px;
 	text-align: center;
-	color: #0b7777;
+	background-color: rgba(255, 255, 255, 0.6);
+	color: #409EFF;
 	ul {
 		li {
 			margin: 10px 0;
