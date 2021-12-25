@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-25 16:16:53
- * @LastEditTime: 2021-12-25 23:32:07
+ * @LastEditTime: 2021-12-25 23:40:57
  * @FilePath: \vue-electron\src\components\note.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
 -->
@@ -225,9 +225,12 @@ export default {
 }
 .font{
   font-size: 12px;
+  font-weight: 700; 
+
 }
 .hfont{
   font-size: 14px;
+  font-weight: 700;
 }
 .cont{
   position: relative;
@@ -235,6 +238,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
+  font-weight: 700;
 }
 .place{
   position: relative;
@@ -242,9 +246,11 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
+  font-weight: 700;
 }
 .com{
   position: relative;
+  font-weight: 700;
   bottom: -40px;
 }
 .clearfix{
