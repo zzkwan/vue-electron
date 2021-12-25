@@ -1,15 +1,15 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-15 17:07:45
- * @LastEditTime: 2021-12-23 20:53:47
- * @LastEditors: Do not edit
+ * @LastEditTime: 2021-12-24 17:39:54
+ * @LastEditors: Please set LastEditors
  * @FilePath: \vue-electron\src\views\index.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
 -->
 <template>
 	<div class="main">
 		<el-menu
-			default-active="2"
+			default-active="1"
 			class="el-menu-vertical-open"
 			:width="controlWidth"
 			:collapse="isCollapse"
@@ -26,9 +26,9 @@
 				<i class="el-icon-document"></i>
 				<span slot="title">工具</span>
 			</el-menu-item>
-			<el-menu-item index="4">
+			<el-menu-item index="4" @click="weatherPage">
 				<i class="el-icon-setting"></i>
-				<span slot="title">导航四</span>
+				<span slot="title">天气</span>
 			</el-menu-item>
 			<el-menu-item @click="changeOpenStatus">
 				<i :class="isfold"></i>
@@ -40,10 +40,15 @@
 			:change="change"
 		/>
 		<default-img />
-		<defaultPage 
+		<defaultPage
+			class="dPage"
 			v-if="showdefault"
 			:change="change"
 			:tim-change="timChange"
+		/>
+		<weather 
+			v-if="showweather"
+			:change="change"
 		/>
 	</div>
 </template>
@@ -52,18 +57,22 @@
 import game from ".././components/game"
 import defaultImg from ".././components/defaultImg"
 import defaultPage from ".././components/defaultPage"
+import weather from ".././components/weather"
 export default {
 	name: "index",
 	components: {
 		game,
 		defaultImg,
-		defaultPage
+		defaultPage,
+		weather
 	},
 	data() {
 		return {
+			// 展示天气页面
+			showweather: false,
 			// 对首页时间样式的动态
 			timChange: 'left: 20%',
-			// 对游戏页面样式的动态修改
+			// 对页面样式的动态修改
 			change: 'left: 15%',
 			// 是否展开默认首页
 			showdefault: true,
@@ -84,11 +93,19 @@ export default {
 		playGame() {
 			this.showgame = true
 			this.showdefault = false
+			this.showweather = false
 		},
 		// 切换首页
 		defaultPage() {
 			this.showgame = false
 			this.showdefault = true
+			this.showweather = false
+		},
+		// 切换天气
+		weatherPage() {
+			this.showweather = true
+			this.showdefault = false
+			this.showgame = false
 		},
 		// 切换展开关闭状态
 		changeOpenStatus() {
