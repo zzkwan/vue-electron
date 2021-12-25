@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-24 10:35:44
- * @LastEditTime: 2021-12-25 16:07:38
+ * @LastEditTime: 2021-12-25 16:24:23
  * @FilePath: \vue-electron\src\components\weather.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
 -->
@@ -181,6 +181,7 @@ export default {
 .footer{
   position: fixed;
   top: 68%;
+  right: 5%;
   width: 80%;
   height: 24%;
   overflow: auto;

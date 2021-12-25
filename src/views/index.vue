@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-15 17:07:45
- * @LastEditTime: 2021-12-24 17:39:54
+ * @LastEditTime: 2021-12-25 16:35:49
  * @LastEditors: Please set LastEditors
  * @FilePath: \vue-electron\src\views\index.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -22,9 +22,9 @@
 				<i class="el-icon-menu"></i>
 				<span slot="title">游戏</span>
 			</el-menu-item>
-			<el-menu-item index="3">
+			<el-menu-item index="3" @click="notePage">
 				<i class="el-icon-document"></i>
-				<span slot="title">工具</span>
+				<span slot="title">便签</span>
 			</el-menu-item>
 			<el-menu-item index="4" @click="weatherPage">
 				<i class="el-icon-setting"></i>
@@ -50,6 +50,9 @@
 			v-if="showweather"
 			:change="change"
 		/>
+		<note
+			v-if="shownote"
+		/>
 	</div>
 </template>
 
@@ -58,16 +61,20 @@ import game from ".././components/game"
 import defaultImg from ".././components/defaultImg"
 import defaultPage from ".././components/defaultPage"
 import weather from ".././components/weather"
+import note from ".././components/note"
 export default {
 	name: "index",
 	components: {
 		game,
 		defaultImg,
 		defaultPage,
-		weather
+		weather,
+		note
 	},
 	data() {
 		return {
+			// 展示便签页
+			shownote: false,
 			// 展示天气页面
 			showweather: false,
 			// 对首页时间样式的动态
@@ -94,18 +101,28 @@ export default {
 			this.showgame = true
 			this.showdefault = false
 			this.showweather = false
+			this.shownote = false
 		},
 		// 切换首页
 		defaultPage() {
 			this.showgame = false
 			this.showdefault = true
 			this.showweather = false
+			this.shownote = false
 		},
 		// 切换天气
 		weatherPage() {
 			this.showweather = true
 			this.showdefault = false
 			this.showgame = false
+			this.shownote = false
+		},
+		// 切换便签
+		notePage() {
+			this.showweather = false
+			this.showdefault = false
+			this.showgame = false
+			this.shownote = true
 		},
 		// 切换展开关闭状态
 		changeOpenStatus() {
