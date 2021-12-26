@@ -1,8 +1,8 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-15 11:20:45
- * @LastEditTime: 2021-12-21 19:50:13
- * @LastEditors: Do not edit
+ * @LastEditTime: 2021-12-26 15:28:19
+ * @LastEditors: Please set LastEditors
  * @FilePath: \vue-electron\src\components\Snacks.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
 -->
@@ -298,7 +298,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .tetris-wrapper {
       position: absolute;
       top: 0;

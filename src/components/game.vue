@@ -1,8 +1,8 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-23 11:27:00
- * @LastEditTime: 2021-12-23 16:14:57
- * @LastEditors: Do not edit
+ * @LastEditTime: 2021-12-26 15:30:23
+ * @LastEditors: Please set LastEditors
  * @FilePath: \vue-electron\src\components\game.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
 -->

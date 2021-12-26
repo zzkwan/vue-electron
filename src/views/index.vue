@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-15 17:07:45
- * @LastEditTime: 2021-12-25 16:35:49
+ * @LastEditTime: 2021-12-26 15:42:44
  * @LastEditors: Please set LastEditors
  * @FilePath: \vue-electron\src\views\index.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -14,21 +14,25 @@
 			:width="controlWidth"
 			:collapse="isCollapse"
 		>
-			<el-menu-item index="1" @click="defaultPage">
+			<el-menu-item index="1" @click="changePage('showdefault')">
 				<i class="el-icon-location"></i>
 				<span slot="title">首页</span>
 			</el-menu-item>
-			<el-menu-item index="2" @click="playGame">
+			<el-menu-item index="2" @click="changePage('showgame')">
 				<i class="el-icon-menu"></i>
 				<span slot="title">游戏</span>
 			</el-menu-item>
-			<el-menu-item index="3" @click="notePage">
+			<el-menu-item index="3" @click="changePage('shownote')">
 				<i class="el-icon-document"></i>
 				<span slot="title">便签</span>
 			</el-menu-item>
-			<el-menu-item index="4" @click="weatherPage">
+			<el-menu-item index="4" @click="changePage('showweather')">
 				<i class="el-icon-setting"></i>
 				<span slot="title">天气</span>
+			</el-menu-item>
+			<el-menu-item index="5" @click="changePage('showcomputer')">
+				<i class="el-icon-mobile-phone"></i>
+				<span slot="title">计算</span>
 			</el-menu-item>
 			<el-menu-item @click="changeOpenStatus">
 				<i :class="isfold"></i>
@@ -53,6 +57,9 @@
 		<note
 			v-if="shownote"
 		/>
+		<computer
+			v-if="showcomputer"
+		/>
 	</div>
 </template>
 
@@ -62,6 +69,7 @@ import defaultImg from ".././components/defaultImg"
 import defaultPage from ".././components/defaultPage"
 import weather from ".././components/weather"
 import note from ".././components/note"
+import computer from ".././components/computer"
 export default {
 	name: "index",
 	components: {
@@ -69,10 +77,13 @@ export default {
 		defaultImg,
 		defaultPage,
 		weather,
-		note
+		note,
+		computer
 	},
 	data() {
 		return {
+			// 展示计算页
+			showcomputer: false,
 			// 展示便签页
 			shownote: false,
 			// 展示天气页面
@@ -96,33 +107,30 @@ export default {
 		}
 	},
 	methods: {
-		// 切换游戏
-		playGame() {
-			this.showgame = true
+		// 切换功能
+		changePage(page) {
+			this.showgame = false
 			this.showdefault = false
 			this.showweather = false
 			this.shownote = false
-		},
-		// 切换首页
-		defaultPage() {
-			this.showgame = false
-			this.showdefault = true
-			this.showweather = false
-			this.shownote = false
-		},
-		// 切换天气
-		weatherPage() {
-			this.showweather = true
-			this.showdefault = false
-			this.showgame = false
-			this.shownote = false
-		},
-		// 切换便签
-		notePage() {
-			this.showweather = false
-			this.showdefault = false
-			this.showgame = false
-			this.shownote = true
+			this.showcomputer = false
+			switch(page) {
+				case 'showgame':
+					this.showgame = true
+					break
+				case 'showdefault':
+					this.showdefault = true
+					break
+				case 'showweather':
+					this.showweather = true
+					break
+				case 'shownote':
+					this.shownote = true
+					break
+				case 'showcomputer':
+					this.showcomputer = true
+					break
+			}
 		},
 		// 切换展开关闭状态
 		changeOpenStatus() {
@@ -157,6 +165,10 @@ export default {
 ul {
 	padding: 0;
 	list-style: none;
+}
+.main{
+	width: 100%;
+	height: 100%;
 }
 .el-menu-vertical-open {
 	position: fixed;

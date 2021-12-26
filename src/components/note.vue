@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-25 16:16:53
- * @LastEditTime: 2021-12-25 23:40:57
+ * @LastEditTime: 2021-12-26 15:11:07
  * @FilePath: \vue-electron\src\components\note.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
 -->
@@ -14,7 +14,7 @@
           <el-card class="card" @click.native="modify(index)">
             <div slot="header" class="clearfix">
               <span class="hfont">{{ item.title }}</span>
-              <el-button style="float: right; padding: 0" type="text" icon="el-icon-close" @click="del(index)"></el-button>
+              <el-button style="float: right; padding: 0" type="text" icon="el-icon-close" @click.stop="del(index)"></el-button>
             </div>
             <div class="font">{{ item.createTime }}</div>
             <div class="cont">活动内容：{{ item.content }}</div>
@@ -116,6 +116,7 @@ export default {
     },
     // 打开弹框
     openDialog() {
+      this.form = {}
       this.iscreate = true
       this.dialogVisible = true
     },
