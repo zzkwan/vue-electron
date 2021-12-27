@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-15 17:07:45
- * @LastEditTime: 2021-12-26 15:42:44
+ * @LastEditTime: 2021-12-27 15:53:15
  * @LastEditors: Please set LastEditors
  * @FilePath: \vue-electron\src\views\index.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -18,19 +18,23 @@
 				<i class="el-icon-location"></i>
 				<span slot="title">首页</span>
 			</el-menu-item>
-			<el-menu-item index="2" @click="changePage('showgame')">
+			<el-menu-item index="2" @click="changePage('showcalendar')">
+				<i class="el-icon-date"></i>
+				<span slot="title">日历</span>
+			</el-menu-item>
+			<el-menu-item index="3" @click="changePage('showgame')">
 				<i class="el-icon-menu"></i>
 				<span slot="title">游戏</span>
 			</el-menu-item>
-			<el-menu-item index="3" @click="changePage('shownote')">
+			<el-menu-item index="4" @click="changePage('shownote')">
 				<i class="el-icon-document"></i>
 				<span slot="title">便签</span>
 			</el-menu-item>
-			<el-menu-item index="4" @click="changePage('showweather')">
+			<el-menu-item index="5" @click="changePage('showweather')">
 				<i class="el-icon-setting"></i>
 				<span slot="title">天气</span>
 			</el-menu-item>
-			<el-menu-item index="5" @click="changePage('showcomputer')">
+			<el-menu-item index="6" @click="changePage('showcomputer')">
 				<i class="el-icon-mobile-phone"></i>
 				<span slot="title">计算</span>
 			</el-menu-item>
@@ -44,7 +48,7 @@
 			:change="change"
 		/>
 		<default-img />
-		<defaultPage
+		<default-page
 			class="dPage"
 			v-if="showdefault"
 			:change="change"
@@ -60,6 +64,9 @@
 		<computer
 			v-if="showcomputer"
 		/>
+		<calendar-page 
+			v-if="showcalendar"
+		/>
 	</div>
 </template>
 
@@ -70,6 +77,7 @@ import defaultPage from ".././components/defaultPage"
 import weather from ".././components/weather"
 import note from ".././components/note"
 import computer from ".././components/computer"
+import calendarPage from ".././components/calendar"
 export default {
 	name: "index",
 	components: {
@@ -78,10 +86,13 @@ export default {
 		defaultPage,
 		weather,
 		note,
-		computer
+		computer,
+		calendarPage
 	},
 	data() {
 		return {
+			// 展开日历
+			showcalendar: false,
 			// 展示计算页
 			showcomputer: false,
 			// 展示便签页
@@ -114,6 +125,7 @@ export default {
 			this.showweather = false
 			this.shownote = false
 			this.showcomputer = false
+			this.showcalendar = false
 			switch(page) {
 				case 'showgame':
 					this.showgame = true
@@ -129,6 +141,9 @@ export default {
 					break
 				case 'showcomputer':
 					this.showcomputer = true
+					break
+				case 'showcalendar':
+					this.showcalendar = true
 					break
 			}
 		},
