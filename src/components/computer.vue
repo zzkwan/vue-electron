@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-26 15:14:12
- * @LastEditTime: 2021-12-26 21:46:10
+ * @LastEditTime: 2021-12-27 09:42:12
  * @FilePath: \vue-electron\src\components\computer.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
 -->
@@ -115,7 +115,8 @@ export default {
       if (e === '=') {
         this.result = this.number
       } else if (e === '√') {
-        this.result = Math.sqrt(this.numberlist.pop())
+        this.result = Math.sqrt(this.number)
+        this.number = this.result
         this.numberlist.push(this.result)
       } else {
         this.opelist.push(e)
