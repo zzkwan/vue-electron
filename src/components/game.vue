@@ -1,7 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-23 11:27:00
- * @LastEditTime: 2021-12-26 15:30:23
+ * @LastEditTime: 2021-12-28 15:04:39
  * @LastEditors: Please set LastEditors
  * @FilePath: \vue-electron\src\components\game.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
@@ -35,11 +35,15 @@
       @snack-chose="snackchose"
       @tetris-chose="tetrischose"
 			@planeWar-chose="planeWarchose"
+			@card-chose="cardChose"
 			@open-list="openList"
     />
 		<List
 			v-if="showList"
 			@leave-list="leaveList"
+		/>
+		<playing-card 
+			v-if="showCards"
 		/>
 	</div>
 </template>
@@ -51,6 +55,7 @@ import MineSweeping from "./MineSweeping";
 import Snacks from "./Snacks"
 import Tetris from "./Tetris"
 import PlaneWar from "./PlaneWar"
+import playingCard from "./playingCard"
 export default {
 	name: "index",
 	components: { 
@@ -59,7 +64,8 @@ export default {
     Snacks,
 		Tetris,
 		PlaneWar,
-		List
+		List,
+		playingCard
 	},
 	props:{
 		change: {
@@ -74,6 +80,8 @@ export default {
 		return {
       // 是否展示选择框
       showLevel: true,
+			// 展示纸牌
+			showCards: false,
 			// 是否展示扫雷游戏盘
 			showGame: false,
       // 是否展示贪吃蛇游戏盘
@@ -102,6 +110,11 @@ export default {
 			this.showGame = true;
       this.showLevel = false;
 		},
+		// 选择卡牌
+		cardChose() {
+			this.showCards = true
+			this.showLevel = false
+		},
     // 选择贪吃蛇游戏
     snackchose() {
       // this.gameInfo = level;
@@ -127,6 +140,7 @@ export default {
       this.showGame = false
       this.showSnack = false
 			this.showList = false
+			this.showCards = false
       this.showLevel = true
     },
 		// 打开排行榜

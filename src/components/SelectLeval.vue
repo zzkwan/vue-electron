@@ -1,8 +1,7 @@
 <!--
  * @Author: 卓智锴
  * @Date: 2021-12-14 15:37:12
- * @LastEditTime: 2021-12-23 17:45:51
- * @LastEditors: Do not edit
+ * @LastEditTime: 2021-12-28 16:50:00
  * @FilePath: \vue-electron\src\components\SelectLeval.vue
  * 衣带渐宽终不悔，bug寻得人憔悴
 -->
@@ -34,7 +33,12 @@
 						<li v-for="(item, index) in planeLevel" :key="index" @click="handlePlaneWarLevel(item.value)">{{ item.text }}</li>
 					</ul>
 				</el-tab-pane>
-				<el-tab-pane label="排行榜" name="fifth">
+				<el-tab-pane label="纸牌" name="fifth">
+					<ul>
+						<li @click="cardChose()"> 开始游戏 </li>
+					</ul>
+				</el-tab-pane>
+				<el-tab-pane label="排行榜" name="sixth">
 					<ul>
 						<li @click="getList"> 查看排行榜 </li>
 					</ul>
@@ -144,6 +148,10 @@ export default {
 		// 查看飞机大战排行
 		getList() {
 			this.$emit("open-list")
+		},
+		// 选择卡牌
+		cardChose() {
+			this.$emit('card-chose')
 		}
 	}
 };

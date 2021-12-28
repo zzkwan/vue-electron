@@ -1,0 +1,66 @@
+Date : 2021-12-28 11:54:46
+Directory : c:\procedure\vue-electron
+Total : 30 files,  20298 codes, 626 comments, 135 blanks, all 21059 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          2 |     15,230 |          0 |          2 |     15,232 |
+| Vue.js     |         19 |      4,164 |        338 |         56 |      4,558 |
+| JavaScript |          6 |        863 |        287 |         70 |      1,220 |
+| Markdown   |          1 |         19 |          0 |          6 |         25 |
+| HTML       |          1 |         16 |          1 |          1 |         18 |
+| CSS        |          1 |          6 |          0 |          0 |          6 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                      | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                         |         30 |     20,298 |        626 |        135 |     21,059 |
+| public                                                    |          1 |         16 |          1 |          1 |         18 |
+| src                                                       |         24 |      4,995 |        616 |        123 |      5,734 |
+| src\assets                                                |          1 |          6 |          0 |          0 |          6 |
+| src\assets\fonts                                          |          1 |          6 |          0 |          0 |          6 |
+| src\components                                            |         18 |      4,134 |        515 |         92 |      4,741 |
+| src\components\js                                         |          2 |        759 |        241 |         54 |      1,054 |
+| src\views                                                 |          2 |        747 |         64 |         14 |        825 |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                  | language   | code       | comment    | blank      | total      |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\procedure\vue-electron\README.md                       | Markdown   |         19 |          0 |          6 |         25 |
+| c:\procedure\vue-electron\babel.config.js                 | JavaScript |          5 |          0 |          1 |          6 |
+| c:\procedure\vue-electron\package-lock.json               | JSON       |     15,150 |          0 |          1 |     15,151 |
+| c:\procedure\vue-electron\package.json                    | JSON       |         80 |          0 |          1 |         81 |
+| c:\procedure\vue-electron\public\index.html               | HTML       |         16 |          1 |          1 |         18 |
+| c:\procedure\vue-electron\src\App.vue                     | Vue.js     |         42 |          0 |          4 |         46 |
+| c:\procedure\vue-electron\src\assets\fonts\font.css       | CSS        |          6 |          0 |          0 |          6 |
+| c:\procedure\vue-electron\src\background.js               | JavaScript |         52 |         30 |         10 |         92 |
+| c:\procedure\vue-electron\src\components\GameCanvas.vue   | Vue.js     |        262 |         39 |          2 |        303 |
+| c:\procedure\vue-electron\src\components\MenuBox.vue      | Vue.js     |         98 |          2 |          2 |        102 |
+| c:\procedure\vue-electron\src\components\MineSweeping.vue | Vue.js     |        451 |         92 |          4 |        547 |
+| c:\procedure\vue-electron\src\components\PlaneWar.vue     | Vue.js     |        563 |         44 |          4 |        611 |
+| c:\procedure\vue-electron\src\components\SelectLeval.vue  | Vue.js     |        158 |         14 |          2 |        174 |
+| c:\procedure\vue-electron\src\components\Snacks.vue       | Vue.js     |        329 |         11 |          2 |        342 |
+| c:\procedure\vue-electron\src\components\Tetris.vue       | Vue.js     |        155 |         11 |          2 |        168 |
+| c:\procedure\vue-electron\src\components\calendar.vue     | Vue.js     |         98 |          5 |          2 |        105 |
+| c:\procedure\vue-electron\src\components\computer.vue     | Vue.js     |        319 |          4 |          2 |        325 |
+| c:\procedure\vue-electron\src\components\defaultImg.vue   | Vue.js     |         48 |          0 |          2 |         50 |
+| c:\procedure\vue-electron\src\components\defaultPage.vue  | Vue.js     |        114 |          3 |          2 |        119 |
+| c:\procedure\vue-electron\src\components\game.vue         | Vue.js     |        142 |         18 |          4 |        164 |
+| c:\procedure\vue-electron\src\components\js\calender.js   | JavaScript |        424 |        198 |         39 |        661 |
+| c:\procedure\vue-electron\src\components\js\planeWar.js   | JavaScript |        335 |         43 |         15 |        393 |
+| c:\procedure\vue-electron\src\components\list.vue         | Vue.js     |        181 |         14 |          2 |        197 |
+| c:\procedure\vue-electron\src\components\note.vue         | Vue.js     |        254 |         15 |          3 |        272 |
+| c:\procedure\vue-electron\src\components\playingCard.vue  | Vue.js     |          7 |          0 |          1 |          8 |
+| c:\procedure\vue-electron\src\components\weather.vue      | Vue.js     |        196 |          2 |          2 |        200 |
+| c:\procedure\vue-electron\src\main.js                     | JavaScript |         14 |          7 |          3 |         24 |
+| c:\procedure\vue-electron\src\views\index.vue             | Vue.js     |        174 |         16 |          4 |        194 |
+| c:\procedure\vue-electron\src\views\test.vue              | Vue.js     |        573 |         48 |         10 |        631 |
+| c:\procedure\vue-electron\vue.config.js                   | JavaScript |         33 |          9 |          2 |         44 |
+| Total                                                     |            |     20,298 |        626 |        135 |     21,059 |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
